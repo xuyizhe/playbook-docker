@@ -1,0 +1,24 @@
+---
+- name: Install some dependencies
+  apt: pkg={{ item }} state=present update_cache=yes
+  with_items:
+    - apt-transport-https
+
+- name: Add gpg key
+  apt_key:
+    keyserver: '{{ docker_apt_keyserver }}'
+    id: '{{ docker_apt_keyid }}'
+    state: present
+
+- name: Add docker repository
+  apt_repository:
+    repo: 'deb {{ docker_apt_repo }} {{ ansible_distribution | lower }}-{{ ansible_distribution_release }} main'
+    state: present
+
+- name: Add backports repository
+  apt_repository:
+    repo: 'deb {{ debian_backports_repo }} {{ ansible_distribution_release }}-backports main'
+    state: present
+
+- name: Install docker-engine
+  apt: name=docker-engine state=present update_cache=yes

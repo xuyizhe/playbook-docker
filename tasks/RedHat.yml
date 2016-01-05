@@ -1,0 +1,11 @@
+---
+- name: Add Docker repository
+  template:
+    src: docker.repo.j2
+    dest: /etc/yum.repos.d/docker.repo
+
+- name: Install docker-engine
+  yum: name=docker-engine state=present update_cache=yes
+
+# - name: Run the Docker installation script
+#   shell: curl -sSL https://get.docker.com/ | sh

@@ -1,0 +1,13 @@
+---
+- name: Check whether Docker exists
+  command: /usr/bin/docker
+  ignore_errors: True
+  register: result
+
+- name: Install Docker
+  include: install.yml
+  when: result | failed
+
+- name: Start Docker
+  service: name=docker state=started enabled=yes
+  when: result | failed
